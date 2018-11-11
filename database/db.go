@@ -13,6 +13,8 @@ type connection struct {
 	collection *mongo.Collection
 }
 
+var Conn *connection
+
 func NewConnection() *connection {
 	config := utils.GetConfig()
 	client, err := mongo.NewClient(config.MongoUrl)
@@ -32,7 +34,7 @@ func (db connection) AddEntry(p entity.Pokemon) {
 }
 
 func (db connection) ReadAll() []entity.Pokemon {
-	pokemon := make([]entity.Pokemon, 1)
+	pokemon := make([]entity.Pokemon, 0)
 	cur, err := db.collection.Find(context.Background(), nil)
 	if err != nil { log.Fatal(err) }
 	for cur.Next(context.Background()) {
